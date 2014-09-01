@@ -7,6 +7,13 @@ require "checkpoint/version"
 
 module Checkpoint
   # Checks for the latest version information as well as alerts.
+  #
+  # @param [Hash] opts the options to check with
+  # @option opts [String] :product The product
+  # @option opts [String] :version The version of the product
+  # @option opts [String] :arch The arch this is running on
+  # @option opts [String] :os The OS this is running on
+  # @option opts [String] :signature A signature to eliminate duplicates
   def self.check(**opts)
     # Build the query parameters
     query = {
@@ -33,7 +40,6 @@ module Checkpoint
     headers = { "Accept" => "application/json" }
     http = Net::HTTP.new(uri.host, uri.port)
     JSON.parse(http.get(uri.path, headers).body).tap do |result|
-      result["current_release_date"] = 0 if !result["current_release_date"]
       result["outdated"] = !!result["outdated"]
     end
   end
