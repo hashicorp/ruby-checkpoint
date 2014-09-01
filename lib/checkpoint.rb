@@ -1,6 +1,7 @@
 require "cgi"
 require "json"
 require "net/http"
+require "securerandom"
 require "uri/http"
 
 require "checkpoint/platform"
@@ -17,6 +18,9 @@ module Checkpoint
   # @option opts [String] :os The OS this is running on. If not specified,
   #   we will try to determine it.
   # @option opts [String] :signature A signature to eliminate duplicates
+  # @option opts [String] :signature_file If specified, a signature will
+  #   be read from this path. If it doesn't exist, it will be created with
+  #   a new random signature.
   def self.check(**opts)
     # Build the query parameters
     query = {
@@ -27,6 +31,17 @@ module Checkpoint
     }
     query[:arch] ||= Platform.arch
     query[:os] ||= Platform.os
+
+    # If a signature file was specified, read it from there.
+    if opts[:signature_file]
+      if !File.file?(opts[:signature_file])
+        File.open(opts[:signature_file], "w+") do |f|
+          f.write(SecureRandom.uuid.to_s + "\n")
+        end
+      end
+
+      query[:signature] = File.read(opts[:signature_file]).chomp
+    end
 
     # Turn the raw query parameters into a proper query string
     query = query.map do |k, v|
