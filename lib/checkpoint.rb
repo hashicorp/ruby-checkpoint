@@ -21,7 +21,22 @@ module Checkpoint
   # @option opts [String] :signature_file If specified, a signature will
   #   be read from this path. If it doesn't exist, it will be created with
   #   a new random signature.
+  # @option opts [String] :cache_file If specified, the response will be
+  #   cached here for cache_time period (defaults to 48 hours).
   def self.check(**opts)
+    # If we have the cache file, then just return the contents.
+    if opts[:cache_file] && File.file(opts[:cache_file])
+      # If the cache file is too old, then delete it
+      mtime = File.mtime(opts[:cache_file]).to_i
+      limit = Time.now.to_i - (60 * 60 * 24 * 2)
+      if mtime > limit
+        return build_check(File.read(opts[:cache_file]))
+      end
+
+      # Delete the file
+      File.unlink(opts[:cache_file])
+    end
+
     # Build the query parameters
     query = {
       version: opts[:version],
@@ -67,11 +82,17 @@ module Checkpoint
       return nil
     end
 
-    JSON.parse(resp.body).tap do |result|
-      result["outdated"] = !!result["outdated"]
-    end
+    build_check(resp.body)
   rescue Exception
     # We don't want check to fail for any reason, so just return nil
     return nil
+  end
+
+  protected
+
+  def self.build_check(response)
+    JSON.parse(response).tap do |result|
+      result["outdated"] = !!result["outdated"]
+    end
   end
 end
