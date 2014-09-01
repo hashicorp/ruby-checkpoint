@@ -25,7 +25,7 @@ module Checkpoint
   #   cached here for cache_time period (defaults to 48 hours).
   def self.check(**opts)
     # If we have the cache file, then just return the contents.
-    if opts[:cache_file] && File.file(opts[:cache_file])
+    if opts[:cache_file] && File.file?(opts[:cache_file])
       # If the cache file is too old, then delete it
       mtime = File.mtime(opts[:cache_file]).to_i
       limit = Time.now.to_i - (60 * 60 * 24 * 2)
@@ -80,6 +80,13 @@ module Checkpoint
     resp = http.get(uri.path, headers)
     if !resp.is_a?(Net::HTTPSuccess)
       return nil
+    end
+
+    # If we have a cache file, write it
+    if opts[:cache_file]
+      File.open(opts[:cache_file], "w+") do |f|
+        f.write(resp.body)
+      end
     end
 
     build_check(resp.body)
