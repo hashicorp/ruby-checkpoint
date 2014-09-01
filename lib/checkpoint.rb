@@ -8,6 +8,8 @@ require "checkpoint/platform"
 require "checkpoint/version"
 
 module Checkpoint
+  @@disabled = false
+
   # Checks for the latest version information as well as alerts.
   #
   # @param [Hash] opts the options to check with
@@ -24,6 +26,8 @@ module Checkpoint
   # @option opts [String] :cache_file If specified, the response will be
   #   cached here for cache_time period (defaults to 48 hours).
   def self.check(**opts)
+    return nil if @@disabled
+
     # If we have the cache file, then just return the contents.
     if opts[:cache_file] && File.file?(opts[:cache_file])
       # If the cache file is too old, then delete it
@@ -93,6 +97,11 @@ module Checkpoint
   rescue Exception
     # We don't want check to fail for any reason, so just return nil
     return nil
+  end
+
+  # Disables checkpoint.
+  def self.disable!
+    @@disabled = true
   end
 
   protected
