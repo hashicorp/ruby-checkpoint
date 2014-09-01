@@ -62,8 +62,16 @@ module Checkpoint
       "User-Agent" => "HashiCorp/ruby-checkpoint #{VERSION}",
     }
     http = Net::HTTP.new(uri.host, uri.port)
-    JSON.parse(http.get(uri.path, headers).body).tap do |result|
+    resp = http.get(uri.path, headers)
+    if !resp.is_a?(Net::HTTPSuccess)
+      return nil
+    end
+
+    JSON.parse(resp.body).tap do |result|
       result["outdated"] = !!result["outdated"]
     end
+  rescue Exception
+    # We don't want check to fail for any reason, so just return nil
+    return nil
   end
 end
