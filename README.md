@@ -1,29 +1,14 @@
-# Ruby::Checkpoint
+# Ruby Checkpoint Client
 
-TODO: Write a gem description
+[Checkpoint](http://checkpoint.hashicorp.com) is an internal service at
+Hashicorp that we use to check version information, broadcoast security
+bulletins, etc.
 
-## Installation
+We understand that software making remote calls over the internet
+for any reason can be undesirable. Because of this, Checkpoint can be
+disabled in all of our software that includes it. You can view the source
+of this client to see that we're not sending any private information.
 
-Add this line to your application's Gemfile:
-
-    gem 'ruby-checkpoint'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install ruby-checkpoint
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/ruby-checkpoint/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+**Note:** This repository is probably useless outside of internal HashiCorp
+use. It is open source for disclosure and because our open source projects
+must be able to link to it.
