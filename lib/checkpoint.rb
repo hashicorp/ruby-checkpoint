@@ -42,7 +42,10 @@ module Checkpoint
       query: query,
     )
 
-    headers = { "Accept" => "application/json" }
+    headers = {
+      "Accept" => "application/json",
+      "User-Agent" => "HashiCorp/ruby-checkpoint #{VERSION}",
+    }
     http = Net::HTTP.new(uri.host, uri.port)
     JSON.parse(http.get(uri.path, headers).body).tap do |result|
       result["outdated"] = !!result["outdated"]
