@@ -1,6 +1,7 @@
 require "cgi"
 require "json"
 require "net/http"
+require "net/https"
 require "securerandom"
 require "uri/http"
 
@@ -71,7 +72,7 @@ module Checkpoint
 
     # Build the URL
     uri = URI::HTTP.build(
-      host: "api.checkpoint.hashicorp.com",
+      host: "checkpoint-api.hashicorp.com",
       path: "/v1/check/#{opts[:product]}",
       query: query,
     )
@@ -81,6 +82,8 @@ module Checkpoint
       "User-Agent" => "HashiCorp/ruby-checkpoint #{VERSION}",
     }
     http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     resp = http.get("#{uri.path}?#{uri.query}", headers)
     if !resp.is_a?(Net::HTTPSuccess)
       return nil
