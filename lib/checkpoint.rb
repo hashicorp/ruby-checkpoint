@@ -56,11 +56,15 @@ module Checkpoint
     if opts[:signature_file]
       if !File.file?(opts[:signature_file])
         File.open(opts[:signature_file], "w+") do |f|
-          f.write(SecureRandom.uuid.to_s + "\n")
+          f.write(SecureRandom.uuid.to_s + "\n\n")
+          f.write("This signature is a randomly generated UUID used to de-duplicate\n")
+          f.write("alerts and version information. This signature is random, it is\n")
+          f.write("not based on any personally identifiable information. To create\n")
+          f.write("a new signature, you can simply delete this file at any time.\n")
         end
       end
 
-      query[:signature] = File.read(opts[:signature_file]).chomp
+      query[:signature] = File.read(opts[:signature_file]).lines.first.chomp
     end
 
     # Turn the raw query parameters into a proper query string
