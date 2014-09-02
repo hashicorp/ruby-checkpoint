@@ -81,7 +81,7 @@ module Checkpoint
       "User-Agent" => "HashiCorp/ruby-checkpoint #{VERSION}",
     }
     http = Net::HTTP.new(uri.host, uri.port)
-    resp = http.get(uri.path, headers)
+    resp = http.get("#{uri.path}?#{uri.query}", headers)
     if !resp.is_a?(Net::HTTPSuccess)
       return nil
     end
