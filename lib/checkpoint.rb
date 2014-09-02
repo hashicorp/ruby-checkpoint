@@ -81,7 +81,7 @@ module Checkpoint
       "Accept" => "application/json",
       "User-Agent" => "HashiCorp/ruby-checkpoint #{VERSION}",
     }
-    http = Net::HTTP.new(uri.host, uri.port)
+    http = Net::HTTP.new(uri.host, 443)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     resp = http.get("#{uri.path}?#{uri.query}", headers)
