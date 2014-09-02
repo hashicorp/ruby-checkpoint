@@ -98,6 +98,9 @@ module Checkpoint
 
     build_check(resp.body)
   rescue Exception
+    # If we want errors, raise it
+    raise if opts[:raise_error]
+
     # We don't want check to fail for any reason, so just return nil
     return nil
   end

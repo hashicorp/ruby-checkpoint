@@ -9,6 +9,7 @@ describe Checkpoint do
         described_class.check(
           product: "test",
           version: "1.0",
+          raise_error: true,
         )
       end
 
