@@ -9,7 +9,7 @@ require "checkpoint/platform"
 require "checkpoint/version"
 
 module Checkpoint
-  @@disabled = false
+  @@disabled = !!ENV["CHECKPOINT_DISABLE"]
 
   # Checks for the latest version information as well as alerts.
   #

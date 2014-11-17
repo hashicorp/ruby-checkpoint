@@ -37,5 +37,12 @@ describe Checkpoint do
 
       expect(c["product"]).to eq("test")
     end
+
+    it "does not check when CHECKPOINT_DISABLE=1" do
+      allow(ENV).to receive(:[])
+        .with("CHECKPOINT_DISABLE")
+        .and_return(1)
+      expect(described_class.check).to be(nil)
+    end
   end
 end
