@@ -35,7 +35,7 @@ module Checkpoint
       mtime = File.mtime(opts[:cache_file]).to_i
       limit = Time.now.to_i - (60 * 60 * 24 * 2)
       if mtime > limit
-        return build_check(File.read(opts[:cache_file]))
+        return build_check(File.read(opts[:cache_file]), "cached" => true)
       end
 
       # Delete the file
@@ -101,7 +101,7 @@ module Checkpoint
     end
 
     build_check(resp.body)
-  rescue Exception
+  rescue StandardError
     # If we want errors, raise it
     raise if opts[:raise_error]
 
@@ -116,9 +116,10 @@ module Checkpoint
 
   protected
 
-  def self.build_check(response)
+  def self.build_check(response, extra_info={})
     JSON.parse(response).tap do |result|
       result["outdated"] = !!result["outdated"]
+      result.merge!(extra_info)
     end
   end
 end
