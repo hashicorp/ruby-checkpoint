@@ -26,8 +26,10 @@ module Checkpoint
   #   a new random signature.
   # @option opts [String] :cache_file If specified, the response will be
   #   cached here for cache_time period (defaults to 48 hours).
-  def self.check(**opts)
+  def self.check(opts=nil, **kargs)
     return nil if @@disabled
+
+    opts = kargs if opts.nil?
 
     # If we have the cache file, then just return the contents.
     if opts[:cache_file] && File.file?(opts[:cache_file])

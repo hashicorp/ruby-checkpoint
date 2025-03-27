@@ -21,6 +21,21 @@ describe Checkpoint do
       its(["current_version"]) { should eq("1.0") }
       its(["outdated"]) { should eq(false) }
       its(["product"]) { should eq("test") }
+
+      context "with hash argument" do
+        subject do
+          described_class.check({
+            product: "test",
+            version: "1.0",
+            raise_error: true,
+          })
+        end
+
+        its(["alerts"]) { should be_empty }
+        its(["current_version"]) { should eq("1.0") }
+        its(["outdated"]) { should eq(false) }
+        its(["product"]) { should eq("test") }
+      end
     end
 
     context "cache file" do
