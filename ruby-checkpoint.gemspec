@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Internal HashiCorp service to check version information.}
   spec.description   = %q{Internal HashiCorp service to check version information}
   spec.homepage      = "http://www.hashicorp.com"
-  spec.license       = "MPL2"
+  spec.license       = "MPL-2.0"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
