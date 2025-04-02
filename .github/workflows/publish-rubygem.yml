@@ -1,5 +1,8 @@
 name: Publish RubyGem
 on:
+  push:
+    branches: 'trigger-rubygem'
+
   workflow_call:
     inputs:
       release_name:
@@ -22,7 +25,8 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Trigger Publish
-        run: ./.ci/publish "${RELEASE_NAME}"
+        run: ./.ci/publish v999
+        #"${RELEASE_NAME}"
         env:
           RELEASE_NAME: ${{ inputs.release_name }}
           HASHIBOT_TOKEN: ${{ vars.HASHIBOT_TOKEN }}
