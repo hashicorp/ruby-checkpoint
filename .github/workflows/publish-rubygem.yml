@@ -29,4 +29,4 @@ jobs:
         #"${RELEASE_NAME}"
         env:
           RELEASE_NAME: ${{ inputs.release_name }}
-          HASHIBOT_TOKEN: ${{ vars.HASHIBOT_TOKEN }}
+          HASHIBOT_TOKEN: ${{ secrets.HASHIBOT_TOKEN }}
