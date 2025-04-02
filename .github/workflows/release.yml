@@ -12,7 +12,6 @@ jobs:
   github-release:
     if: github.repository == 'hashicorp/ruby-checkpoint'
     name: Create GitHub release
-    runs-on: ubuntu-latest
     permissions:
       contents: write
     uses: ./.github/workflows/github-release.yml
@@ -22,7 +21,6 @@ jobs:
     if: github.repository == 'hashicorp/ruby-checkpoint'
     needs: [github-release]
     name: Trigger RubyGem publication
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/publish-rubygem.yml
     secrets: inherit
     with:
