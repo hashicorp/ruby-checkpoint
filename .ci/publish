@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+csource="${BASH_SOURCE[0]}"
+while [ -h "$csource" ] ; do csource="$(readlink "$csource")"; done
+root="$( cd -P "$( dirname "$csource" )/../" && pwd )"
+
+. "${root}/.ci/load-ci.sh"
+
+# Allow the release name to be provided
+release_name="${1}"
+if [ -z "${release_name}" ]; then
+    release_name="${tag}"
+fi
+
+# Send dispatch to vagrant-terraform
+github_repository_dispatch "vagrant-terraform" "publish-rubygem" "repository_tag=${repository}" "release_name=${release_name}"

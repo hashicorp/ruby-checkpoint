@@ -1,0 +1,23 @@
+name: Vagrant Ruby Tests
+on:
+  pull_request:
+    branches:
+      - main
+    ignored-paths:
+      - 'lib/**'
+      - 'spec/**'
+      - 'Gemfile'
+      - 'ruby-checkpoint.gemspec'
+      - 'Rakefile'
+
+jobs:
+  unit-tests-ruby:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        ruby: [ '3.1', '3.2', '3.3', '3.4' ]
+    name: Checkpoint spec tests on Ruby ${{ matrix.ruby }}
+    steps:
+      - name: Stubbed for skip
+        run: "echo 'No testing required in changeset'"
