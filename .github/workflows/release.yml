@@ -1,6 +1,12 @@
 on:
   push:
     tags: 'v*'
+  workflow_dispatch:
+    inputs:
+      release_name:
+        description: 'Name of the GitHub release (example: v1.0.0)'
+        type: string
+        require: true
 
 jobs:
   github-release:
@@ -10,6 +16,8 @@ jobs:
     permissions:
       content: write
     uses: ./.github/workflows/github-release.yml
+    with:
+      release_name: ${{ inputs.release_name }}
   publish-rubygem:
     if: github.repository == 'hashicorp/ruby-checkpoint'
     needs: [github-release]
@@ -17,3 +25,5 @@ jobs:
     runs-on: ubuntu-latest
     uses: ./.github/workflows/publish-rubygem.yml
     secrets: inherit
+    with:
+      release_name: ${{ inputs.release_name }}
