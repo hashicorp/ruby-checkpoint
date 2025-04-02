@@ -14,7 +14,7 @@ jobs:
     name: Create GitHub release
     runs-on: ubuntu-latest
     permissions:
-      content: write
+      contents: write
     uses: ./.github/workflows/github-release.yml
     with:
       release_name: ${{ inputs.release_name }}
